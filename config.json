@@ -1,0 +1,8 @@
+{
+    "url": "discourse.sourcecred.io",
+    "dao": "0x0f1449527c458EDee87d19C39CA4f0326818aA46",
+    "tokenManager": "0x0f1449527c458EDee87d19C39CA4f0326818aA46",
+    "voting": "0x0f1449527c458EDee87d19C39CA4f0326818aA46",
+    "githubToken": "abcdefghijkl"
+
+}
