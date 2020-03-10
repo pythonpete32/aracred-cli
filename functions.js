@@ -1,7 +1,9 @@
 const chalk = require("chalk");
 const execa = require("execa");
 var fs = require('fs');
-const Parser = require('json2csv');
+var Table = require('cli-table');
+
+
 
 module.exports = {
     saveinput: async (input) => {},
@@ -17,7 +19,7 @@ module.exports = {
     },
     runSC: async () => {
         try {
-            await execa.command(`node bin/sourcecred.js load pythonpete32/powertools`);
+            await execa.command(`node bin/sourcecred.js discourse https://port.oceanprotocol.com`);
 
         } catch (error) {
             console.error(error);
@@ -25,7 +27,7 @@ module.exports = {
     },
     calcCred: async () => {
         try {
-            await execa.command(`node bin/sourcecred.js scores pythonpete32/powertools > CRED.json`, {
+            await execa.command(`node bin/sourcecred.js scores port.oceanprotocol.com > CRED.json`, {
                 shell: true
             });
         } catch (error) {
@@ -39,7 +41,10 @@ module.exports = {
             data[1].users.map((element) => {
                 cred.push([element.address[4], element.totalCred])
             })
-            fs.writeFile('./toMint.json', cred, (error) => {
+
+
+            var jsonString = JSON.stringify(cred);
+            fs.writeFile('./toMint.json', jsonString, (error) => {
                 if (error) {
                     console.log(error)
                 }
@@ -49,17 +54,29 @@ module.exports = {
             const opts = {
                 fields
             };
-            const parser = new Parser(opts);
-            const csv = parser.parse(Data);
-            console.log(csv);
 
-            fs.writeFile('./toMint.csv', csv, (error) => {
+            // SAVE CSV LOGIC
+            const csvContent = cred.map(e => e.join(",")).join("\n");
+
+            fs.writeFile('./toMint.csv', csvContent, (error) => {
                 if (error) {
                     console.log(error)
                 }
-                console.log("Saved toMint.json")
+                console.log("Saved toMint.csv")
             })
             // return Promise.resolve(data);
+
+            // print the cred as table
+            var table = new Table({
+                head: [chalk.blueBright.bold('Address'), chalk.blueBright.bold('Ammount')],
+                colWidths: [60, 30]
+            });
+
+            cred.map((row) => {
+                table.push(row)
+            })
+
+            return table.toString()
 
         } catch (error) {
             console.log(error)

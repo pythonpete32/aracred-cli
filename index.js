@@ -16,7 +16,7 @@ const f = require("./functions");
 //
 
 process.env.SOURCECRED_GITHUB_TOKEN =
-  "";
+  "aad8749e7635f7401e76abf99258a1e818264a69";
 
 //const config = require("../scores.json");
 
