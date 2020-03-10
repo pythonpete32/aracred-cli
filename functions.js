@@ -1,5 +1,7 @@
 const chalk = require("chalk");
 const execa = require("execa");
+var fs = require('fs');
+const Parser = require('json2csv');
 
 module.exports = {
     saveinput: async (input) => {},
@@ -32,14 +34,32 @@ module.exports = {
     },
     processCSV: async () => {
         try {
-            const data = require('./CRED.json')
+            const data = require('/home/m-root/projects/sourcecred/CRED.json')
             cred = []
             data[1].users.map((element) => {
                 cred.push([element.address[4], element.totalCred])
             })
+            fs.writeFile('./toMint.json', cred, (error) => {
+                if (error) {
+                    console.log(error)
+                }
+                console.log("Saved toMint.json")
+            })
+            const fields = ['Address', 'Grain'];
+            const opts = {
+                fields
+            };
+            const parser = new Parser(opts);
+            const csv = parser.parse(Data);
+            console.log(csv);
 
-            console.log(cred)
-            return Promise.resolve(data);
+            fs.writeFile('./toMint.csv', csv, (error) => {
+                if (error) {
+                    console.log(error)
+                }
+                console.log("Saved toMint.json")
+            })
+            // return Promise.resolve(data);
 
         } catch (error) {
             console.log(error)

@@ -16,7 +16,7 @@ const f = require("./functions");
 //
 
 process.env.SOURCECRED_GITHUB_TOKEN =
-  "11ff774f6d38b7bcebb943813b9d28b6fc9cbf28";
+  "";
 
 //const config = require("../scores.json");
 
@@ -37,6 +37,12 @@ const run = async () => {
       title: "Calc Grain",
       task: async () => {
         console.log(await f.calcCred());
+      },
+    },
+    {
+      title: "saveCSV",
+      task: async () => {
+        await f.processCSV();
       },
     },
   ]);
