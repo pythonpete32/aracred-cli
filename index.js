@@ -1,12 +1,7 @@
-const chalk = require('chalk')
-const Configstore = require('configstore')
-const inquirer = require('inquirer');
-const jsonfile = require('jsonfile')
-const execa = require('execa');
-const ora = require('ora');
+#!/usr/bin/env node
 
-let Table = require('cli-table');
-
+const Listr = require("listr");
+const f = require("./functions");
 //
 // Flow:
 //    - get info from json file : token, url, DAO addresses
@@ -20,44 +15,32 @@ let Table = require('cli-table');
 //    - Mint
 //
 
+process.env.SOURCECRED_GITHUB_TOKEN =
+  "11ff774f6d38b7bcebb943813b9d28b6fc9cbf28";
 
+//const config = require("../scores.json");
 
-const loadConfig = async () => {
-    return Promise.resolve('data');
-}
+const run = async () => {
+  const tasks = new Listr([{
+      title: "Run Backend",
+      task: async () => {
+        await f.startBackend();
+      },
+    },
+    {
+      title: "Run SourceCred",
+      task: async () => {
+        await f.runSC();
+      },
+    },
+    {
+      title: "Calc Grain",
+      task: async () => {
+        console.log(await f.calcCred());
+      },
+    },
+  ]);
 
-const startBackend = () => {
-    
-
-}
-
-const runSC = async () => {
-    return Promise.resolve('data');
-}
-
-const calcGrain = async () => {
-    return Promise.resolve('data');
-}
-
-const saveGrain = async () => {
-    return Promise.resolve('data');
-}
-
-const mintGrain = async () => {
-    return Promise.resolve('data');
-}
-
-const userInput = async () => {
-    /*
-     * mint grain
-     */
-    const questions = [
-
-        {
-            name: 'mint',
-            type: 'confirm',
-            message: chalk.bold('Mint Grain?'),
-            default: true
-        }
-    ]
-}
+  tasks.run();
+};
+run();
