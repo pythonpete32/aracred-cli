@@ -15,13 +15,13 @@ const f = require("./functions");
 //    - Mint
 //
 
-process.env.SOURCECRED_GITHUB_TOKEN =
-  "aad8749e7635f7401e76abf99258a1e818264a69";
-
 //const config = require("../scores.json");
 
+
 const run = async () => {
-  const tasks = new Listr([{
+  const forum = await f.getInput()
+  const tasks = new Listr([
+    {
       title: "Run Backend",
       task: async () => {
         await f.startBackend();
@@ -30,7 +30,7 @@ const run = async () => {
     {
       title: "Run SourceCred",
       task: async () => {
-        await f.runSC();
+        await f.runSC(forum);
       },
     },
     {

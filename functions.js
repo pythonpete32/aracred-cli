@@ -2,12 +2,22 @@ const chalk = require("chalk");
 const execa = require("execa");
 var fs = require('fs');
 var Table = require('cli-table');
+const inquirer = require('inquirer')
 
 
 
 module.exports = {
     saveinput: async (input) => {},
     displayinput: async (input) => {},
+	getInput: async () => {
+		const questions = [{
+				name: "forum",
+				type: "input",
+				message: "Enter the " + chalk.white.bold("Discourse Forum") + " you want to run SourceCred against:",
+			}
+		];
+		return inquirer.prompt(questions);
+	},
     startBackend: async () => {
         try {
             await execa.command("yarn backend");
@@ -17,12 +27,15 @@ module.exports = {
         }
 
     },
-    runSC: async () => {
+    runSC: async (forum) => {
         try {
-            await execa.command(`node bin/sourcecred.js discourse https://port.oceanprotocol.com`);
+
+        console.log(forum)
+            await execa.command(`node bin/sourcecred.js discourse https://${forum.forum}`);
 
         } catch (error) {
             console.error(error);
+            return
         }
     },
     calcCred: async () => {
@@ -36,7 +49,7 @@ module.exports = {
     },
     processCSV: async () => {
         try {
-            const data = require('/home/m-root/projects/sourcecred/CRED.json')
+            const data = require(process.cwd() + '/CRED.json')
             cred = []
             data[1].users.map((element) => {
                 cred.push([element.address[4], element.totalCred])
