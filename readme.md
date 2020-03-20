@@ -30,4 +30,4 @@ link the package so it can be refrenced globaly
 npm link
 ```
 
-navigate back to the SourceCred folder and type `aracli` into the terminal
+navigate back to the SourceCred folder and type `aracred` into the terminal
