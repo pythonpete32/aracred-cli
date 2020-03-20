@@ -28,4 +28,4 @@ link the package so it can be refrenced globaly
 npm link
 ```
 
-navigate back to the SourceCred folder and type `aracred` into the terminal
+Navigate back to the SourceCred folder and type `aracred` into the terminal. This will create `toMint.csv` and `addresses.csv` files. Edit `addresses.csv` to add user's addresses and use `aracred addresses` to obtain a new `addresses.json` file that can be uploaded as local labels in Aragon Client.
