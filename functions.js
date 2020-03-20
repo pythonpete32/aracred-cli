@@ -27,10 +27,8 @@ module.exports = {
         }
 
     },
-    runSC: async (forum) => {
+    runSC: async forum => {
         try {
-
-        console.log(forum)
             await execa.command(`node bin/sourcecred.js discourse https://${forum.forum}`);
 
         } catch (error) {
@@ -38,9 +36,9 @@ module.exports = {
             return
         }
     },
-    calcCred: async () => {
+    calcCred: async forum => {
         try {
-            await execa.command(`node bin/sourcecred.js scores https://${forum.forum} > CRED.json`, {
+            await execa.command(`node bin/sourcecred.js scores ${forum.forum} > CRED.json`, {
                 shell: true
             });
         } catch (error) {

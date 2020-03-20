@@ -36,7 +36,7 @@ const run = async () => {
     {
       title: "Calc Grain",
       task: async () => {
-        console.log(await f.calcCred());
+        console.log(await f.calcCred(forum));
       },
     },
     {
