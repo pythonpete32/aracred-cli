@@ -53,33 +53,29 @@ module.exports = {
                 cred.push([element.address[4], element.totalCred])
             })
 
-
-            var jsonString = JSON.stringify(cred);
-            fs.writeFile('./toMint.json', jsonString, (error) => {
-                if (error) {
-                    console.log(error)
-                }
-                console.log("Saved toMint.json")
-            })
-            const fields = ['Address', 'Grain'];
-            const opts = {
-                fields
-            };
-
             // SAVE CSV LOGIC
-            const csvContent = cred.map(e => e.join(",")).join("\n");
+            const mintCSVContent = "name,amount\n" + cred.map(e => e.join(",")).join("\n");
 
-            fs.writeFile('./toMint.csv', csvContent, (error) => {
+            fs.writeFile('./toMint.csv', mintCSVContent, (error) => {
                 if (error) {
                     console.log(error)
                 }
-                console.log("Saved toMint.csv")
+                console.log("Saved toMint.csv.")
             })
             // return Promise.resolve(data);
 
+            const addressesCSVContent = "name,address\n" + cred.map(e => e[0]+',').join("\n");
+
+            fs.writeFile('./addresses.csv', addressesCSVContent, (error) => {
+                if (error) {
+                    console.log(error)
+                }
+                console.log("Saved addresses.csv. Please edit this file in order to add user's addresses.")
+            })
+
             // print the cred as table
             var table = new Table({
-                head: [chalk.blueBright.bold('Address'), chalk.blueBright.bold('Ammount')],
+                head: [chalk.blueBright.bold('Address'), chalk.blueBright.bold('Amount')],
                 colWidths: [60, 30]
             });
 

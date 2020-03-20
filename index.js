@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 const Listr = require("listr");
-const f = require("./functions");
+const mint = require("./mint");
+const addresses = require("./addresses")
 //
 // Flow:
 //    - get info from json file : token, url, DAO addresses
@@ -17,36 +18,54 @@ const f = require("./functions");
 
 //const config = require("../scores.json");
 
+const args = process.argv.slice(2);
 
-const run = async () => {
-  const forum = await f.getInput()
+const mintTasks = async () => {
+  const forum = await mint.getInput()
   const tasks = new Listr([
     {
       title: "Run Backend",
       task: async () => {
-        await f.startBackend();
+        await mint.startBackend();
       },
     },
     {
       title: "Run SourceCred",
       task: async () => {
-        await f.runSC(forum);
+        await mint.runSC(forum);
       },
     },
     {
       title: "Calc Grain",
       task: async () => {
-        console.log(await f.calcCred(forum));
+        console.log(await mint.calcCred(forum));
       },
     },
     {
       title: "saveCSV",
       task: async () => {
-        await f.processCSV();
+        await mint.processCSV();
       },
     },
   ]);
 
   tasks.run();
 };
-run();
+
+const addressesTasks = async () => {
+  const tasks = new Listr([
+    {
+      title: "Transform CSV to JSON",
+      task: async () => {
+        await addresses.transform();
+      },
+    },
+  ]);
+
+  tasks.run();
+};
+if (!args[0]) {
+  mintTasks()
+} else if (args[0] === 'addresses') {
+  addressesTasks()
+}
