@@ -40,7 +40,7 @@ module.exports = {
     },
     calcCred: async () => {
         try {
-            await execa.command(`node bin/sourcecred.js scores port.oceanprotocol.com > CRED.json`, {
+            await execa.command(`node bin/sourcecred.js scores https://${forum.forum} > CRED.json`, {
                 shell: true
             });
         } catch (error) {
