@@ -79,7 +79,7 @@ module.exports = {
 
             // print the cred as table
             var table = new Table({
-                head: [chalk.blueBright.bold('Address'), chalk.blueBright.bold('Ammount')],
+                head: [chalk.blueBright.bold('Address'), chalk.blueBright.bold('Amount')],
                 colWidths: [60, 30]
             });
 
