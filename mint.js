@@ -12,45 +12,45 @@ module.exports = {
     },
     saveinput: async (input) => {},
     displayinput: async (input) => {},
-	getInput: async () => {
-		const questions = [{
-            name: "mode",
-            type: "list",
-            message: "What do you want to run SourceCred against: ",
-            choices: [{
-                name: chalk.green("Discourse"),
-                value: "discourse"
+    getInput: async () => {
+        const questions = [{
+                name: "mode",
+                type: "list",
+                message: "What do you want to run SourceCred against: ",
+                choices: [{
+                        name: chalk.green("Discourse"),
+                        value: "discourse"
+                    },
+                    {
+                        name: chalk.green("Github"),
+                        value: "github"
+
+                    }
+
+                ]
             },
             {
-                name: chalk.green("Github"),
-                value: "github"
-
+                name: "forum",
+                type: "input",
+                message: "Enter the " + chalk.yellowBright.bold("Discourse Forum") + " you want to run SourceCred against:",
+                when: (answers) => {
+                    return answers.mode == 'discourse';
+                }
+            },
+            {
+                name: "repo",
+                type: "input",
+                message: "Enter the " + chalk.yellowBright.bold("GitHub Repo") + " you want to run SourceCred against:",
+                when: (answers) => {
+                    return answers.mode == 'github';
+                }
             }
-                
-            ]
-        },
-        {
-            name: "forum",
-            type: "input",
-            message: "Enter the " + chalk.yellowBright.bold("Discourse Forum") + " you want to run SourceCred against:",
-            when: (answers) => {
-                return answers.mode == 'discourse';
-            }
-        },
-        {
-            name: "repo",
-            type: "input",
-            message: "Enter the " + chalk.yellowBright.bold("GitHub Repo") + " you want to run SourceCred against:",
-            when: (answers) => {
-                return answers.mode == 'github';
-            }
-        }
 
         ];
-        
+
         const answers = await inquirer.prompt(questions);
         return answers
-	},
+    },
     startBackend: async () => {
         try {
             await execa.command("yarn backend");
@@ -60,20 +60,28 @@ module.exports = {
         }
 
     },
-    runSC: async forum => {
+    runSC: async input => {
         try {
-            await execa.command(`node bin/sourcecred.js discourse https://${forum.forum}`);
+            (input.mode == "github") 
+            ? await execa.command(`node bin/sourcecred.js load ${input.repo}`)
+            : await execa.command(`node bin/sourcecred.js discourse https://${input.forum}`)
 
         } catch (error) {
             console.error(error);
             return
         }
     },
-    calcCred: async forum => {
+    calcCred: async input => {
         try {
-            await execa.command(`node bin/sourcecred.js scores ${forum.forum} > CRED.json`, {
+            (input.mode == "github") 
+            ? await execa.command(`node bin/sourcecred.js scores ${input.repo} > CRED.json`, {shell: true})
+            : await execa.command(`node bin/sourcecred.js scores ${input.forum} > CRED.json`, {shell: true})
+
+            /*
+            await execa.command(`node bin/sourcecred.js scores ${input.forum} > CRED.json`, {
                 shell: true
             });
+            */
         } catch (error) {
             console.error();
         }
@@ -97,7 +105,7 @@ module.exports = {
             })
             // return Promise.resolve(data);
 
-            const addressesCSVContent = "name,address\n" + cred.map(e => e[0]+',').join("\n");
+            const addressesCSVContent = "name,address\n" + cred.map(e => e[0] + ',').join("\n");
 
             fs.writeFile('./addresses.csv', addressesCSVContent, (error) => {
                 if (error) {
