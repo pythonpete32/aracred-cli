@@ -4,11 +4,26 @@ var fs = require('fs');
 var Table = require('cli-table');
 const inquirer = require('inquirer')
 
-
+const validate = (url) => {
+    console.log("last char: " + url.slice(-1))
+    if( (url.search(':') == -1) && !(url.slice(-1) == '/')) {
+        return true
+    } else {
+        return "enter valid Discorse address"
+    }
+}
 
 module.exports = {
     hello: () => {
         return "hello";
+    },
+    validateDiscorse: (url) => {
+        console.log("last char: " + url.slice(-1))
+        if( (url.search(':') == -1) && !(url.slice(-1) == '/')) {
+            return true
+        } else {
+            return "enter valid Discorse address"
+        }
     },
     saveinput: async (input) => {},
     displayinput: async (input) => {},
@@ -33,6 +48,7 @@ module.exports = {
                 name: "forum",
                 type: "input",
                 message: "Enter the " + chalk.yellowBright.bold("Discourse Forum") + " you want to run SourceCred against:",
+                validate: (value) => (validate(value)),
                 when: (answers) => {
                     return answers.mode == 'discourse';
                 }
