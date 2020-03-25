@@ -22,6 +22,7 @@ const args = process.argv.slice(2);
 
 const mintTasks = async () => {
   const forum = await mint.getInput()
+  console.log(forum)
   const tasks = new Listr([
     {
       title: "Run Backend",

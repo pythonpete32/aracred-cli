@@ -14,12 +14,42 @@ module.exports = {
     displayinput: async (input) => {},
 	getInput: async () => {
 		const questions = [{
-				name: "forum",
-				type: "input",
-				message: "Enter the " + chalk.white.bold("Discourse Forum") + " you want to run SourceCred against:",
-			}
-		];
-		return inquirer.prompt(questions);
+            name: "mode",
+            type: "list",
+            message: "What do you want to run SourceCred against: ",
+            choices: [{
+                name: chalk.green("Discourse"),
+                value: "discourse"
+            },
+            {
+                name: chalk.green("Github"),
+                value: "github"
+
+            }
+                
+            ]
+        },
+        {
+            name: "forum",
+            type: "input",
+            message: "Enter the " + chalk.yellowBright.bold("Discourse Forum") + " you want to run SourceCred against:",
+            when: (answers) => {
+                return answers.mode == 'discourse';
+            }
+        },
+        {
+            name: "repo",
+            type: "input",
+            message: "Enter the " + chalk.yellowBright.bold("GitHub Repo") + " you want to run SourceCred against:",
+            when: (answers) => {
+                return answers.mode == 'github';
+            }
+        }
+
+        ];
+        
+        const answers = await inquirer.prompt(questions);
+        return answers
 	},
     startBackend: async () => {
         try {
