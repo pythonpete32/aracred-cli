@@ -7,6 +7,9 @@ const inquirer = require('inquirer')
 
 
 module.exports = {
+    hello: () => {
+        return "hello";
+    },
     saveinput: async (input) => {},
     displayinput: async (input) => {},
 	getInput: async () => {
