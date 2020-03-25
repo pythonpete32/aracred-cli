@@ -6,22 +6,29 @@ const addresses = require("./addresses")
 //
 // Flow:
 //    - get info from json file : token, url, DAO addresses
-//    - `yarn backend`
-//    - await `node bin/sourcecred.js discourse https://discourse.sourcecred.io`
-//    - await `node bin/sourcecred.js scores discourse.sourcecred.io`
+//    - 1. `yarn backend`
+//    - 2. await `node bin/sourcecred.js discourse https://discourse.sourcecred.io`
+//    - 3. await `node bin/sourcecred.js scores discourse.sourcecred.io`
 //    - format grain
 //    - Save grain to json file
 //    - display grain
 //    - Ask to mint
 //    - Mint
 //
+//  github
+//    - 1. `yarn backend`
+//    - 2. await `node bin/sourcecred.js load pythonpete32/aracred-cli` 
+//    - 3. await `node bin/sourcecred.js scores pythonpete32/aracred-cli`
 
 //const config = require("../scores.json");
 
 const args = process.argv.slice(2);
 
+process.env.SOURCECRED_GITHUB_TOKEN = '71b30c97c9f9115c5f125446665ba1439249fcb3';
+
 const mintTasks = async () => {
-  const forum = await mint.getInput()
+  const input = await mint.getInput()
+  console.log(input)
   const tasks = new Listr([
     {
       title: "Run Backend",
@@ -32,13 +39,13 @@ const mintTasks = async () => {
     {
       title: "Run SourceCred",
       task: async () => {
-        await mint.runSC(forum);
+        await mint.runSC(input);
       },
     },
     {
       title: "Calc Grain",
       task: async () => {
-        console.log(await mint.calcCred(forum));
+        console.log(await mint.calcCred(input));
       },
     },
     {
