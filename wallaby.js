@@ -1,18 +1,23 @@
-module.exports = function () {
+module.exports = function(wallaby) {
   return {
     files: [
-      './*.js' 
+      {
+        pattern: "node_modules/babel-polyfill/dist/polyfill.js",
+        instrument: false
+      },
+      "src/**/*.js"
     ],
 
-    tests: [
-      './*.spec.js' 
-    ],
+    tests: ["test/**/*.spec.js"],
 
     env: {
-      type: 'node'
+      type: "node"
     },
 
-    testFramework: 'jest'
+    testFramework: "jest",
 
+    compilers: {
+      "**/*.js": wallaby.compilers.babel()
+    }
   };
 };
